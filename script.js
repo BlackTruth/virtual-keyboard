@@ -14,6 +14,7 @@ body.appendChild(keyboard);
 
 let textArea = document.createElement("textarea");
 textArea.className = "keyboard__text-area";
+textArea.autofocus = true;
 keyboard.appendChild(textArea);
 
 let keyboardPanel = document.createElement("div");
@@ -25,6 +26,8 @@ keyboard.appendChild(keyboardPanel);
 //   type: "letter | number | functional",
 //   initial: "value",
 //   shifted: "value when shift is pressed (optional)",
+//   func: "functional keys function",
+//   isClick: "event only on click",
 // };
 
 let arrayOfButtonKeys = [];
@@ -46,7 +49,54 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Backspase",
     func: function () {
-      textArea.value = textArea.value.substring(0, textArea.value.length - 1);
+      let cursorPositionStart = textArea.selectionStart;
+      let cursorPositionEnd = textArea.selectionEnd;
+      textArea.value =
+        textArea.value.substring(0, cursorPositionStart - 1) +
+        textArea.value.substring(cursorPositionEnd);
+      textArea.focus();
+      if (cursorPositionStart > 0) {
+        cursorPositionStart--;
+      }
+      textArea.selectionStart = cursorPositionStart;
+      textArea.selectionEnd = cursorPositionStart;
+    },
+  },
+]);
+
+arrayOfButtonKeys.push([
+  {
+    type: "functional",
+    initial: "Tab",
+    func: function () {
+      textArea.value += "\t";
+    },
+  },
+  { type: "letter", initial: "й", shifted: "Й" },
+  { type: "letter", initial: "ц", shifted: "Ц" },
+  { type: "letter", initial: "у", shifted: "У" },
+  { type: "letter", initial: "к", shifted: "К" },
+  { type: "letter", initial: "е", shifted: "Е" },
+  { type: "letter", initial: "н", shifted: "Н" },
+  { type: "letter", initial: "г", shifted: "Г" },
+  { type: "letter", initial: "ш", shifted: "Ш" },
+  { type: "letter", initial: "щ", shifted: "Щ" },
+  { type: "letter", initial: "з", shifted: "З" },
+  { type: "letter", initial: "х", shifted: "Х" },
+  { type: "letter", initial: "ъ", shifted: "Ъ" },
+  { type: "number", initial: "\\", shifted: "/" },
+  {
+    type: "functional",
+    initial: "Delete",
+    func: function () {
+      let cursorPositionStart = textArea.selectionStart;
+      let cursorPositionEnd = textArea.selectionEnd;
+      textArea.value =
+        textArea.value.substring(0, cursorPositionStart) +
+        textArea.value.substring(cursorPositionEnd + 1);
+      textArea.focus();
+      textArea.selectionStart = cursorPositionStart;
+      textArea.selectionEnd = cursorPositionStart;
     },
   },
 ]);
@@ -84,17 +134,37 @@ arrayOfButtonKeys.forEach((line) => {
           timer = setTimeout(tick, 50);
         }, 500);
       });
-
       keyDom.addEventListener("mouseup", () => clearTimeout(timer));
       keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
-    } else if (key.type == "letter")
-      keyDom.addEventListener("click", function () {
+    } else if (key.type == "letter") {
+      let timer;
+      keyDom.addEventListener("mousedown", () => {
         if (_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps)
           textArea.value += key.shifted;
         else textArea.value += key.initial;
+        timer = setTimeout(function tick() {
+          if (_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps)
+            textArea.value += key.shifted;
+          else textArea.value += key.initial;
+          timer = setTimeout(tick, 50);
+        }, 500);
       });
-    else {
-      keyDom.addEventListener("click", key.func);
+      keyDom.addEventListener("mouseup", () => clearTimeout(timer));
+      keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
+    } else {
+      if (key.isClick) keyDom.addEventListener("click", key.func);
+      else {
+        let timer;
+        keyDom.addEventListener("mousedown", () => {
+          key.func();
+          timer = setTimeout(function tick() {
+            key.func();
+            timer = setTimeout(tick, 50);
+          }, 500);
+        });
+        keyDom.addEventListener("mouseup", () => clearTimeout(timer));
+        keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
+      }
     }
 
     keyboardLine.appendChild(keyDom);
