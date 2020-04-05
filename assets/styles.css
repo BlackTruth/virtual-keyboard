@@ -39,6 +39,13 @@ body {
   outline: 1px solid #666;
   margin: 3px;
 }
+.keyboard-line__button_single {
+  align-items: center;
+}
+
+.keyboard-line__button_single .keyboard-line__button-shifted-text{
+  display: none;
+}
 
 .keyboard-line__button_pressed {
   background-color: chartreuse;
@@ -47,6 +54,10 @@ body {
 .keyboard-line__button:hover {
   cursor: pointer;
   background-color: #deb8ff;
+}
+
+.keyboard-line__button_pressed:hover {
+  background-color: rgb(127,230,60);
 }
 
 .keyboard-line__button-main-text {
