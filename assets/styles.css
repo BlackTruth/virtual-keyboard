@@ -40,6 +40,10 @@ body {
   margin: 3px;
 }
 
+.keyboard-line__button_pressed {
+  background-color: chartreuse;
+}
+
 .keyboard-line__button:hover {
   cursor: pointer;
   background-color: #deb8ff;
@@ -85,3 +89,4 @@ body {
 
 .keyboard-line__button_default {
 }
+
