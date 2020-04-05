@@ -1,7 +1,10 @@
 const _FUNCTIONAL_KEYS = {
   shift: false,
+  shiftRight: false,
   ctrl: false,
+  ctrlRight: false,
   alt: false,
+  altRight: false,
   windows: false,
   caps: false,
 };
@@ -11,12 +14,14 @@ if (!window.localStorage.getItem("virtualKeyBoardLang"))
 
 const _vKeyBoard = {
   textArea: undefined,
-  focusTextArea: (cursorPosition) =>
+  focusTextArea: (cursorPosition) => {
+    if(!cursorPosition)
+      cursorPosition = _vKeyBoard.textArea.selectionStart;
     setTimeout(() => {
       _vKeyBoard.textArea.focus();
       _vKeyBoard.textArea.selectionStart = cursorPosition;
       _vKeyBoard.textArea.selectionEnd = cursorPosition;
-    }, 0),
+  }, 0)},
   insertSymbol: (value) => {
     let cursorPositionStart = textArea.selectionStart;
     let cursorPositionEnd = textArea.selectionEnd;
@@ -151,6 +156,7 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Backspace",
+    code: "Backspace",
     func: function () {
       let cursorPositionStart = textArea.selectionStart;
       let cursorPositionEnd = textArea.selectionEnd;
@@ -169,7 +175,6 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Tab",
-    isClick: true,
     func: () => _vKeyBoard.insertSymbol("\t"),
     code: "Tab",
   },
@@ -512,7 +517,12 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     isClick: true,
-    func: () => (_FUNCTIONAL_KEYS.shift = !_FUNCTIONAL_KEYS.shift),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.shiftRight = !_FUNCTIONAL_KEYS.shiftRight;
+      _FUNCTIONAL_KEYS.shiftRight
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
     code: "ShiftRight",
   },
 ]);
@@ -522,14 +532,24 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Ctrl",
     isClick: true,
-    func: () => (_FUNCTIONAL_KEYS.ctrl = !_FUNCTIONAL_KEYS.ctrl),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.ctrl = !_FUNCTIONAL_KEYS.ctrl;
+      _FUNCTIONAL_KEYS.ctrl
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
     code: "ControlLeft",
   },
   {
     type: "functional",
     initial: "Win",
     isClick: true,
-    func: () => (_FUNCTIONAL_KEYS.windows = !_FUNCTIONAL_KEYS.windows),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.windows = !_FUNCTIONAL_KEYS.windows;
+      _FUNCTIONAL_KEYS.windows
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
     code: "MetaLeft",
   },
   {
@@ -554,7 +574,12 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Alt",
     isClick: true,
-    func: () => (_FUNCTIONAL_KEYS.alt = !_FUNCTIONAL_KEYS.alt),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.altRight = !_FUNCTIONAL_KEYS.altRight;
+      _FUNCTIONAL_KEYS.altRight
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
     code: "AltRight",
   },
   {
@@ -579,7 +604,6 @@ arrayOfButtonKeys.push([
       if (nextLineBegin < 1) nextLineBegin = value.length;
       let nextLineLength = value.indexOf("\n", nextLineBegin) - nextLineBegin;
       if (nextLineLength < 0) nextLineLength = value.length - nextLineBegin;
-      console.log(nextLineBegin, nextLineLength);
       let newPosition =
         nextLineBegin +
         (cursorLength > nextLineLength ? nextLineLength : cursorLength);
@@ -600,7 +624,13 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Ctrl",
-    func: () => (_FUNCTIONAL_KEYS.ctrl = !_FUNCTIONAL_KEYS.ctrl),
+    isClick: true,
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.ctrlRight = !_FUNCTIONAL_KEYS.ctrlRight;
+      _FUNCTIONAL_KEYS.ctrlRight
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
     code: "ControlRight",
   },
 ]);
@@ -658,18 +688,33 @@ arrayOfButtonKeys.forEach((line) => {
     });
     if (getType(key) == "number" || getType(key) == "letter") {
       let timer;
+      let isMouseUp = false;
+      let isAnimationEnd = false;
       keyDom.addEventListener("mousedown", () => {
+        isMouseUp = isAnimationEnd = false;
         _vKeyBoard.insertSymbol(getChar(key));
         timer = setTimeout(function tick() {
           _vKeyBoard.insertSymbol(getChar(key));
           timer = setTimeout(tick, 50);
         }, 500);
       });
-      keyDom.addEventListener("mouseup", () => clearTimeout(timer));
-      keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
-      keyDom.addEventListener("animationend", () =>
-        keyDom.classList.remove("keyboard-line__button_pressed")
-      );
+
+      keyDom.addEventListener("mouseup", () => {
+        clearTimeout(timer);
+        isMouseUp = true;
+        isAnimationEnd &&
+          keyDom.classList.remove("keyboard-line__button_pressed");
+      });
+      keyDom.addEventListener("mouseleave", () => {
+        clearTimeout(timer);
+        isMouseUp = true;
+        isAnimationEnd &&
+          keyDom.classList.remove("keyboard-line__button_pressed");
+      });
+      keyDom.addEventListener("animationend", () => {
+        isAnimationEnd = true;
+        isMouseUp && keyDom.classList.remove("keyboard-line__button_pressed");
+      });
     } else {
       keyDom.classList.add(
         "keyboard-line__button-main-text_" +
@@ -691,12 +736,17 @@ arrayOfButtonKeys.forEach((line) => {
           }, 500);
         });
         keyDom.addEventListener("mouseup", () => {
-          isMouseUp = true;
           clearTimeout(timer);
+          isMouseUp = true;
           isAnimationEnd &&
             keyDom.classList.remove("keyboard-line__button_pressed");
         });
-        keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
+        keyDom.addEventListener("mouseleave", () => {
+          clearTimeout(timer);
+          isMouseUp = true;
+          isAnimationEnd &&
+            keyDom.classList.remove("keyboard-line__button_pressed");
+        });
         keyDom.addEventListener("animationend", () => {
           isAnimationEnd = true;
           isMouseUp && keyDom.classList.remove("keyboard-line__button_pressed");
@@ -710,30 +760,55 @@ arrayOfButtonKeys.forEach((line) => {
 
 document.addEventListener("keydown", (event) => {
   let key = document.querySelector(`div[key=${event.code}]`);
-  if (key) key.classList.add("keyboard-line__button_pressed");
+  if (key) {
+    if (event.code == "CapsLock") {
+      let capsDom = document.querySelector('div[key="CapsLock"');
+      if (capsDom.classList.contains("keyboard-line__button_pressed")){
+        capsDom.classList.remove("keyboard-line__button_pressed");
+        _FUNCTIONAL_KEYS.caps = false;
+      }else {
+        capsDom.classList.add("keyboard-line__button_pressed");
+        _FUNCTIONAL_KEYS.caps = true;
+      }
+    } else key.classList.add("keyboard-line__button_pressed");
+    if(event.code == 'Tab'){
+      event.preventDefault();
+      _vKeyBoard.insertSymbol('\t');
+    }
+  }
 });
 
 document.addEventListener("keyup", (event) => {
   let key = document.querySelector(`div[key=${event.code}]`);
-  if (key) key.classList.remove("keyboard-line__button_pressed");
+  if (key) {
+    if (event.code == "CapsLock") {
+    } else key.classList.remove("keyboard-line__button_pressed");
+  }
 });
 
 document.addEventListener("click", (event) => {
-  // _vKeyBoard.focusTextArea();
-  if (_FUNCTIONAL_KEYS.alt && _FUNCTIONAL_KEYS.shift) {
+  if( !(event.target.classList.contains('keyboard-line__button') || event.target.parentElement && event.target.parentElement.classList.contains('keyboard-line__button'))){
+    _vKeyBoard.focusTextArea();
+  }
+  if (
+    (_FUNCTIONAL_KEYS.alt || _FUNCTIONAL_KEYS.altRight) &&
+    (_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.shiftRight)
+  ) {
     window.localStorage.setItem(
       "virtualKeyBoardLang",
       window.localStorage.getItem("virtualKeyBoardLang") == "ru" ? "en" : "ru"
     );
     _FUNCTIONAL_KEYS.alt = false;
     _FUNCTIONAL_KEYS.shift = false;
+    _FUNCTIONAL_KEYS.altRight = false;
+    _FUNCTIONAL_KEYS.shiftRight = false;
     document
-      .querySelector("div[key^=Shift]")
-      .classList.remove("keyboard-line__button_pressed");
+      .querySelectorAll("div[key^=Shift]")
+      .forEach((e) => e.classList.remove("keyboard-line__button_pressed"));
 
     document
-      .querySelector("div[key^=Alt]")
-      .classList.remove("keyboard-line__button_pressed");
+      .querySelectorAll("div[key^=Alt]")
+      .forEach((e) => e.classList.remove("keyboard-line__button_pressed"));
     changeLayout();
   }
 });
