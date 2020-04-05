@@ -2,6 +2,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #E3EDF7;
+  font-family: 'Exo 2', sans-serif;
 }
 
 .keyboard {
@@ -32,12 +34,13 @@ body {
   align-items: flex-end;
   width: 50px;
   height: 50px;
-  background-color: burlywood;
   box-sizing: border-box;
   padding: 5px;
   user-select: none;
-  outline: 1px solid #666;
   margin: 3px;
+  background: #E3EDF7;
+  box-shadow: 4px 4px 20px rgba(111, 140, 176, 0.5), -6px -6px 20px #FFFFFF, 2px 2px 4px rgba(114, 142, 171, 0.4);
+  border-radius: 10px;
 }
 .keyboard-line__button_single {
   align-items: center;
@@ -47,17 +50,31 @@ body {
   display: none;
 }
 
-.keyboard-line__button_pressed {
-  background-color: chartreuse;
-}
-
 .keyboard-line__button:hover {
   cursor: pointer;
-  background-color: #deb8ff;
+  background: #DBE6F0;
+}
+/* .keyboard-line__button:active, */
+.keyboard-line__button_pressed {
+  animation: buttonAnimation 0.3s ease;
+  box-shadow: inset 4px 4px 8px #C1D5EE, inset -4px -4px 9px rgba(255, 255, 255, 0.88);
 }
 
+@keyframes buttonAnimation {
+  0% {
+    box-shadow: 4px 4px 20px rgba(111, 140, 176, 0.5), -6px -6px 20px #FFFFFF, 2px 2px 4px rgba(114, 142, 171, 0.4);
+  }
+  50% {
+    box-shadow: none;
+  }
+  100% {
+    box-shadow: inset 4px 4px 8px #C1D5EE, inset -4px -4px 9px rgba(255, 255, 255, 0.88);
+  }
+}
+
+
 .keyboard-line__button_pressed:hover {
-  background-color: rgb(127,230,60);
+  background: #DBE6F0;
 }
 
 .keyboard-line__button-main-text {
@@ -90,7 +107,7 @@ body {
 }
 
 .keyboard-line__button-main-text_backspace {
-  width: 70px;
+  width: 100px;
 }
 
 .keyboard-line__button-shifted-text {

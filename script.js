@@ -169,21 +169,112 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Tab",
+    isClick: true,
     func: () => _vKeyBoard.insertSymbol("\t"),
+    code: "Tab",
   },
-  { type: "letter", initial: "й", shifted: "Й" },
-  { type: "letter", initial: "ц", shifted: "Ц" },
-  { type: "letter", initial: "у", shifted: "У" },
-  { type: "letter", initial: "к", shifted: "К" },
-  { type: "letter", initial: "е", shifted: "Е" },
-  { type: "letter", initial: "н", shifted: "Н" },
-  { type: "letter", initial: "г", shifted: "Г" },
-  { type: "letter", initial: "ш", shifted: "Ш" },
-  { type: "letter", initial: "щ", shifted: "Щ" },
-  { type: "letter", initial: "з", shifted: "З" },
-  { type: "letter", initial: "х", shifted: "Х" },
-  { type: "letter", initial: "ъ", shifted: "Ъ" },
-  { type: "number", initial: "\\", shifted: "/" },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "й", shifted: "Й" },
+      en: { initial: "q", shifted: "Q" },
+    },
+    code: "KeyQ",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "ц", shifted: "Ц" },
+      en: { initial: "w", shifted: "W" },
+    },
+    code: "KeyW",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "у", shifted: "У" },
+      en: { initial: "e", shifted: "E" },
+    },
+    code: "KeyE",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "к", shifted: "К" },
+      en: { initial: "r", shifted: "R" },
+    },
+    code: "KeyR",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "е", shifted: "Е" },
+      en: { initial: "t", shifted: "T" },
+    },
+    code: "KeyT",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "н", shifted: "Н" },
+      en: { initial: "y", shifted: "Y" },
+    },
+    code: "KeyY",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "г", shifted: "Г" },
+      en: { initial: "u", shifted: "U" },
+    },
+    code: "KeyU",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "ш", shifted: "Ш" },
+      en: { initial: "i", shifted: "I" },
+    },
+    code: "KeyI",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "щ", shifted: "Щ" },
+      en: { initial: "o", shifted: "O" },
+    },
+    code: "KeyO",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "з", shifted: "З" },
+      en: { initial: "p", shifted: "P" },
+    },
+    code: "KeyP",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "х", shifted: "Х" },
+      en: { type: "number", initial: "[", shifted: "{" },
+    },
+    code: "BracketLeft",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "ъ", shifted: "Ъ" },
+      en: { type: "number", initial: "]", shifted: "}" },
+    },
+    code: "BracketRight",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "\\", shifted: "/" },
+      en: { initial: "\\", shifted: "|" },
+    },
+    code: "Backslash",
+  },
   {
     type: "functional",
     initial: "Delete",
@@ -195,6 +286,7 @@ arrayOfButtonKeys.push([
         textArea.value.substring(cursorPositionEnd + 1);
       _vKeyBoard.focusTextArea(cursorPositionStart);
     },
+    code: "Delete",
   },
 ]);
 
@@ -202,23 +294,106 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Caps Lock",
-    func: () => (_FUNCTIONAL_KEYS.caps = !_FUNCTIONAL_KEYS.caps),
+    isClick: true,
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.caps = !_FUNCTIONAL_KEYS.caps;
+      _FUNCTIONAL_KEYS.caps
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
+    code: "CapsLock",
   },
-  { type: "letter", initial: "ф", shifted: "Ф" },
-  { type: "letter", initial: "ы", shifted: "Ы" },
-  { type: "letter", initial: "в", shifted: "В" },
-  { type: "letter", initial: "а", shifted: "А" },
-  { type: "letter", initial: "п", shifted: "П" },
-  { type: "letter", initial: "р", shifted: "Р" },
-  { type: "letter", initial: "о", shifted: "О" },
-  { type: "letter", initial: "л", shifted: "Л" },
-  { type: "letter", initial: "д", shifted: "Д" },
-  { type: "letter", initial: "ж", shifted: "Ж" },
-  { type: "letter", initial: "э", shifted: "Э" },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "Ф", shifted: "ф" },
+      en: { initial: "a", shifted: "A" },
+    },
+    code: "KeyA",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "ы", shifted: "Ы" },
+      en: { initial: "s", shifted: "S" },
+    },
+    code: "KeyS",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "в", shifted: "В" },
+      en: { initial: "d", shifted: "D" },
+    },
+    code: "KeyD",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "а", shifted: "А" },
+      en: { initial: "f", shifted: "F" },
+    },
+    code: "KeyF",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "п", shifted: "П" },
+      en: { initial: "g", shifted: "G" },
+    },
+    code: "KeyG",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "р", shifted: "Р" },
+      en: { initial: "h", shifted: "H" },
+    },
+    code: "KeyH",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "о", shifted: "О" },
+      en: { initial: "j", shifted: "J" },
+    },
+    code: "KeyJ",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "л", shifted: "Л" },
+      en: { initial: "k", shifted: "K" },
+    },
+    code: "KeyK",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "д", shifted: "Д" },
+      en: { initial: "l", shifted: "L" },
+    },
+    code: "KeyL",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "ж", shifted: "Ж" },
+      en: { type: "number", initial: ";", shifted: ":" },
+    },
+    code: "Semicolon",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "э", shifted: "Э" },
+      en: { type: "number", initial: "'", shifted: '"' },
+    },
+    code: "Quote",
+  },
   {
     type: "functional",
     initial: "Enter",
     func: () => _vKeyBoard.insertSymbol("\n"),
+    code: "Enter",
   },
 ]);
 
@@ -235,16 +410,84 @@ arrayOfButtonKeys.push([
     },
     code: "ShiftLeft",
   },
-  { type: "letter", initial: "я", shifted: "Я" },
-  { type: "letter", initial: "ч", shifted: "Ч" },
-  { type: "letter", initial: "с", shifted: "С" },
-  { type: "letter", initial: "м", shifted: "М" },
-  { type: "letter", initial: "и", shifted: "И" },
-  { type: "letter", initial: "т", shifted: "Т" },
-  { type: "letter", initial: "ь", shifted: "Ь" },
-  { type: "letter", initial: "б", shifted: "Б" },
-  { type: "letter", initial: "ю", shifted: "Ю" },
-  { type: "number", initial: ".", shifted: "," },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "я", shifted: "Я" },
+      en: { initial: "z", shifted: "Z" },
+    },
+    code: "KeyZ",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "ч", shifted: "Ч" },
+      en: { initial: "x", shifted: "X" },
+    },
+    code: "KeyX",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "с", shifted: "С" },
+      en: { initial: "c", shifted: "C" },
+    },
+    code: "KeyC",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "м", shifted: "М" },
+      en: { initial: "v", shifted: "V" },
+    },
+    code: "KeyV",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "и", shifted: "И" },
+      en: { initial: "b", shifted: "B" },
+    },
+    code: "KeyB",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "т", shifted: "Т" },
+      en: { initial: "n", shifted: "N" },
+    },
+    code: "KeyN",
+  },
+  {
+    type: "letter",
+    languages: {
+      ru: { initial: "ь", shifted: "Ь" },
+      en: { initial: "m", shifted: "M" },
+    },
+    code: "KeyM",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "б", shifted: "Б" },
+      en: { type: "number", initial: ",", shifted: "<" },
+    },
+    code: "Comma",
+  },
+  {
+    languages: {
+      ru: { type: "letter", initial: "ю", shifted: "Ю" },
+      en: { type: "number", initial: ".", shifted: ">" },
+    },
+    code: "Period",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: ".", shifted: "," },
+      en: { initial: "/", shifted: "?" },
+    },
+    code: "Slash",
+  },
   {
     type: "functional",
     initial: "↑",
@@ -263,6 +506,7 @@ arrayOfButtonKeys.push([
       if (newPosition < 0) newPosition = 0;
       _vKeyBoard.focusTextArea(newPosition);
     },
+    code: "ArrowUp",
   },
   {
     type: "functional",
@@ -279,12 +523,14 @@ arrayOfButtonKeys.push([
     initial: "Ctrl",
     isClick: true,
     func: () => (_FUNCTIONAL_KEYS.ctrl = !_FUNCTIONAL_KEYS.ctrl),
+    code: "ControlLeft",
   },
   {
     type: "functional",
-    initial: "Windows",
+    initial: "Win",
     isClick: true,
     func: () => (_FUNCTIONAL_KEYS.windows = !_FUNCTIONAL_KEYS.windows),
+    code: "MetaLeft",
   },
   {
     type: "functional",
@@ -302,12 +548,14 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Space",
     func: () => _vKeyBoard.insertSymbol(" "),
+    code: "Space",
   },
   {
     type: "functional",
     initial: "Alt",
     isClick: true,
     func: () => (_FUNCTIONAL_KEYS.alt = !_FUNCTIONAL_KEYS.alt),
+    code: "AltRight",
   },
   {
     type: "functional",
@@ -316,6 +564,7 @@ arrayOfButtonKeys.push([
       let cursorPositionStart = textArea.selectionStart;
       _vKeyBoard.focusTextArea(cursorPositionStart - 1);
     },
+    code: "ArrowLeft",
   },
   {
     type: "functional",
@@ -337,6 +586,7 @@ arrayOfButtonKeys.push([
       if (newPosition < 0) newPosition = value.length;
       _vKeyBoard.focusTextArea(newPosition);
     },
+    code: "ArrowDown",
   },
   {
     type: "functional",
@@ -345,11 +595,13 @@ arrayOfButtonKeys.push([
       let cursorPositionStart = textArea.selectionStart;
       _vKeyBoard.focusTextArea(cursorPositionStart + 1);
     },
+    code: "ArrowRight",
   },
   {
     type: "functional",
     initial: "Ctrl",
     func: () => (_FUNCTIONAL_KEYS.ctrl = !_FUNCTIONAL_KEYS.ctrl),
+    code: "ControlRight",
   },
 ]);
 
@@ -388,7 +640,7 @@ arrayOfButtonKeys.forEach((line) => {
 
     let mainText = document.createElement("div");
     mainText.className = "keyboard-line__button-main-text";
-    if (key.type == "letter") {
+    if (getType(key) == "letter" || getType(key) == "functional") {
       keyDom.classList.add("keyboard-line__button_single");
     }
     keyDom.appendChild(mainText);
@@ -400,7 +652,11 @@ arrayOfButtonKeys.forEach((line) => {
     if (getType(key) == "number") {
       shiftedText.innerText = getChar(key, "shifted");
     }
-    if (getType(key) == "number") {
+
+    keyDom.addEventListener("mousedown", () => {
+      keyDom.classList.add("keyboard-line__button_pressed");
+    });
+    if (getType(key) == "number" || getType(key) == "letter") {
       let timer;
       keyDom.addEventListener("mousedown", () => {
         _vKeyBoard.insertSymbol(getChar(key));
@@ -411,17 +667,9 @@ arrayOfButtonKeys.forEach((line) => {
       });
       keyDom.addEventListener("mouseup", () => clearTimeout(timer));
       keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
-    } else if (getType(key) == "letter") {
-      let timer;
-      keyDom.addEventListener("mousedown", () => {
-        _vKeyBoard.insertSymbol(getChar(key));
-        timer = setTimeout(function tick() {
-          _vKeyBoard.insertSymbol(getChar(key));
-          timer = setTimeout(tick, 50);
-        }, 500);
-      });
-      keyDom.addEventListener("mouseup", () => clearTimeout(timer));
-      keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
+      keyDom.addEventListener("animationend", () =>
+        keyDom.classList.remove("keyboard-line__button_pressed")
+      );
     } else {
       keyDom.classList.add(
         "keyboard-line__button-main-text_" +
@@ -432,15 +680,27 @@ arrayOfButtonKeys.forEach((line) => {
       if (key.isClick) keyDom.addEventListener("click", () => key.func(keyDom));
       else {
         let timer;
+        let isMouseUp = false;
+        let isAnimationEnd = false;
         keyDom.addEventListener("mousedown", () => {
+          isMouseUp = isAnimationEnd = false;
           key.func(keyDom);
           timer = setTimeout(function tick() {
             key.func(keyDom);
             timer = setTimeout(tick, 50);
           }, 500);
         });
-        keyDom.addEventListener("mouseup", () => clearTimeout(timer));
+        keyDom.addEventListener("mouseup", () => {
+          isMouseUp = true;
+          clearTimeout(timer);
+          isAnimationEnd &&
+            keyDom.classList.remove("keyboard-line__button_pressed");
+        });
         keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
+        keyDom.addEventListener("animationend", () => {
+          isAnimationEnd = true;
+          isMouseUp && keyDom.classList.remove("keyboard-line__button_pressed");
+        });
       }
     }
 
