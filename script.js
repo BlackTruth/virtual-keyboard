@@ -4,6 +4,7 @@ const _FUNCTIONAL_KEYS = {
   alt: false,
   windows: false,
   caps: false,
+  language: "en",
 };
 
 const _vKeyBoard = {
@@ -54,19 +55,97 @@ keyboard.appendChild(keyboardPanel);
 
 let arrayOfButtonKeys = [];
 arrayOfButtonKeys.push([
-  { type: "letter", initial: "ё", shifted: "Ё", code: "Backquote" },
-  { type: "number", initial: "1", shifted: "!", code: "Digit1" },
-  { type: "number", initial: "2", shifted: '"' },
-  { type: "number", initial: "3", shifted: "№" },
-  { type: "number", initial: "4", shifted: ";" },
-  { type: "number", initial: "5", shifted: "%" },
-  { type: "number", initial: "6", shifted: ":" },
-  { type: "number", initial: "7", shifted: "?" },
-  { type: "number", initial: "8", shifted: "*" },
-  { type: "number", initial: "9", shifted: "(" },
-  { type: "number", initial: "0", shifted: ")" },
-  { type: "number", initial: "-", shifted: "_" },
-  { type: "number", initial: "=", shifted: "+" },
+  {
+    languages: {
+      ru: { type: "letter", initial: "ё", shifted: "Ё" },
+      en: { type: "number", initial: "`", shifted: "~" },
+    },
+    code: "Backquote",
+  },
+  {
+    type: "number",
+    initial: "1",
+    shifted: "!",
+    code: "Digit1",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "2", shifted: '"' },
+      en: { initial: "2", shifted: "@" },
+    },
+    code: "Digit2",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "3", shifted: "№" },
+      en: { initial: "3", shifted: "#" },
+    },
+    code: "Digit3",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "4", shifted: ";" },
+      en: { initial: "4", shifted: "$" },
+    },
+    code: "Digit4",
+  },
+  {
+    type: "number",
+    initial: "5",
+    shifted: "%",
+    code: "Digit5",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "6", shifted: ":" },
+      en: { initial: "6", shifted: "^" },
+    },
+    code: "Digit6",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "7", shifted: "?" },
+      en: { initial: "7", shifted: "&" },
+    },
+    code: "Digit7",
+  },
+  {
+    type: "number",
+    initial: "8",
+    shifted: "*",
+    code: "Digit8",
+  },
+  {
+    type: "number",
+    initial: "9",
+    shifted: "(",
+    code: "Digit9",
+  },
+  {
+    type: "number",
+    initial: "0",
+    shifted: ")",
+    code: "Digit0",
+  },
+  {
+    type: "number",
+    languages: {
+      ru: { initial: "-", shifted: "_" },
+      en: { initial: "-", shifted: "_" },
+    },
+    code: "Minus",
+  },
+  {
+    type: "number",
+    initial: "=",
+    shifted: "+",
+    code: "Equal",
+  },
   {
     type: "functional",
     initial: "Backspace",
@@ -145,7 +224,13 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Shift",
-    func: () => (_FUNCTIONAL_KEYS.shift = !_FUNCTIONAL_KEYS.shift),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.shift = !_FUNCTIONAL_KEYS.shift;
+      _FUNCTIONAL_KEYS.shift
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
+    code: "ShiftLeft",
   },
   { type: "letter", initial: "я", shifted: "Я" },
   { type: "letter", initial: "ч", shifted: "Ч" },
@@ -162,6 +247,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     func: () => (_FUNCTIONAL_KEYS.shift = !_FUNCTIONAL_KEYS.shift),
+    code: "ShiftRight",
   },
 ]);
 
@@ -179,7 +265,13 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Alt",
-    func: () => (_FUNCTIONAL_KEYS.alt = !_FUNCTIONAL_KEYS.alt),
+    func: (keyDom) => {
+      _FUNCTIONAL_KEYS.alt = !_FUNCTIONAL_KEYS.alt;
+      _FUNCTIONAL_KEYS.alt
+        ? keyDom.classList.add("keyboard-line__button_pressed")
+        : keyDom.classList.remove("keyboard-line__button_pressed");
+    },
+    code: "AltLeft",
   },
   {
     type: "functional",
@@ -215,6 +307,26 @@ arrayOfButtonKeys.push([
   },
 ]);
 
+function getType(key) {
+  if (key.type) return key.type;
+  else return key.languages[_FUNCTIONAL_KEYS.language].type;
+}
+
+function getChar(key, type) {
+  let isShifted =
+    getType(key) == "number"
+      ? _FUNCTIONAL_KEYS.shift
+      : _FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps;
+  if (type) {
+    isShifted = type == "shifted";
+  }
+  if (key.initial) return isShifted ? key.shifted : key.initial;
+  else
+    return isShifted
+      ? key.languages[_FUNCTIONAL_KEYS.language].shifted
+      : key.languages[_FUNCTIONAL_KEYS.language].initial;
+}
+
 arrayOfButtonKeys.forEach((line) => {
   let keyboardLine = document.createElement("div");
   keyboardLine.className = "keyboard-line";
@@ -230,43 +342,31 @@ arrayOfButtonKeys.forEach((line) => {
       mainText.classList.add("keyboard-line__button-main-text_letter");
     }
     keyDom.appendChild(mainText);
-    mainText.innerText = key.initial;
+    mainText.innerText = getChar(key, "initial");
 
-    if (key.type == "number") {
+    if (getType(key) == "number") {
       let shiftedText = document.createElement("div");
       shiftedText.className = "keyboard-line__button-shifted-text";
       keyDom.appendChild(shiftedText);
-      shiftedText.innerText = key.shifted;
+      shiftedText.innerText = getChar(key, "shifted");
     }
-    if (key.type == "number") {
+    if (getType(key) == "number") {
       let timer;
       keyDom.addEventListener("mousedown", () => {
-        _vKeyBoard.insertSymbol(
-          _FUNCTIONAL_KEYS.shift ? key.shifted : key.initial
-        );
+        _vKeyBoard.insertSymbol(getChar(key));
         timer = setTimeout(function tick() {
-          _vKeyBoard.insertSymbol(
-            _FUNCTIONAL_KEYS.shift ? key.shifted : key.initial
-          );
+          _vKeyBoard.insertSymbol(getChar(key));
           timer = setTimeout(tick, 50);
         }, 500);
       });
       keyDom.addEventListener("mouseup", () => clearTimeout(timer));
       keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
-    } else if (key.type == "letter") {
+    } else if (getType(key) == "letter") {
       let timer;
       keyDom.addEventListener("mousedown", () => {
-        _vKeyBoard.insertSymbol(
-          _FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps
-            ? key.shifted
-            : key.initial
-        );
+        _vKeyBoard.insertSymbol(getChar(key));
         timer = setTimeout(function tick() {
-          _vKeyBoard.insertSymbol(
-            _FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps
-              ? key.shifted
-              : key.initial
-          );
+          _vKeyBoard.insertSymbol(getChar(key));
           timer = setTimeout(tick, 50);
         }, 500);
       });
@@ -283,9 +383,9 @@ arrayOfButtonKeys.forEach((line) => {
       else {
         let timer;
         keyDom.addEventListener("mousedown", () => {
-          key.func();
+          key.func(keyDom);
           timer = setTimeout(function tick() {
-            key.func();
+            key.func(keyDom);
             timer = setTimeout(tick, 50);
           }, 500);
         });
@@ -307,3 +407,39 @@ document.addEventListener("keyup", (event) => {
   let key = document.querySelector(`div[key=${event.code}]`);
   if (key) key.classList.remove("keyboard-line__button_pressed");
 });
+
+document.addEventListener("click", (event) => {
+  if (_FUNCTIONAL_KEYS.alt && _FUNCTIONAL_KEYS.shift) {
+    _FUNCTIONAL_KEYS.language = _FUNCTIONAL_KEYS.language == "ru" ? "en" : "ru";
+    _FUNCTIONAL_KEYS.alt = false;
+    _FUNCTIONAL_KEYS.shift = false;
+    document
+      .querySelector("div[key^=Shift]")
+      .classList.remove("keyboard-line__button_pressed");
+
+    document
+      .querySelector("div[key^=Alt]")
+      .classList.remove("keyboard-line__button_pressed");
+    changeLayout();
+  }
+});
+
+function changeLayout() {
+  let rows = document.querySelectorAll(".keyboard-panel > .keyboard-line");
+  rows.forEach(function (row, i) {
+    let buttons = row.querySelectorAll(".keyboard-line__button");
+    buttons.forEach(function (button, j) {
+      let key = arrayOfButtonKeys[i][j];
+      if (getType(key) == "number" || getType(key) == "letter") {
+        let mainText = button.querySelector(".keyboard-line__button-main-text");
+        mainText.innerText = getChar(key, "initial");
+        if (getType(key) == "number") {
+          let shiftedText = button.querySelector(
+            ".keyboard-line__button-shifted-text"
+          );
+          shiftedText.innerText = getChar(key, "shifted");
+        }
+      }
+    });
+  });
+}
