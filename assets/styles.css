@@ -1,8 +1,20 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .keyboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
 }
 
 .keyboard__text-area {
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .keyboard-panel {
@@ -24,6 +36,8 @@
   box-sizing: border-box;
   padding: 5px;
   user-select: none;
+  outline: 1px solid #666;
+  margin: 3px;
 }
 
 .keyboard-line__button:hover {
@@ -37,6 +51,31 @@
 
 .keyboard-line__button-main-text_letter {
   align-self: center;
+}
+
+.keyboard-line__button-main-text_tab {
+  width: 85px;
+}
+
+.keyboard-line__button-main-text_caps-lock,
+.keyboard-line__button-main-text_ctrl {
+  width: 100px;
+}
+
+.keyboard-line__button-main-text_shift {
+  width: 130px;
+}
+
+.keyboard-line__button-main-text_space {
+  width: 334px;
+}
+
+.keyboard-line__button-main-text_enter {
+  width: 110px;
+}
+
+.keyboard-line__button-main-text_backspace {
+  width: 70px;
 }
 
 .keyboard-line__button-shifted-text {

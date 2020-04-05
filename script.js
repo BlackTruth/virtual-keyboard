@@ -6,6 +6,24 @@ const _FUNCTIONAL_KEYS = {
   caps: false,
 };
 
+const _vKeyBoard = {
+  textArea : undefined,
+  focusTextArea : (cursorPosition ) => setTimeout( () => {
+    _vKeyBoard.textArea.focus();
+    _vKeyBoard.textArea.selectionStart = cursorPosition;
+    _vKeyBoard.textArea.selectionEnd = cursorPosition;
+  },0),
+  insertSymbol : (value) => {
+    let cursorPositionStart = textArea.selectionStart;
+    let cursorPositionEnd = textArea.selectionEnd;
+    _vKeyBoard.textArea.value =
+    _vKeyBoard.textArea.value.substring(0, cursorPositionStart) +
+      value +
+      _vKeyBoard.textArea.value.substring(cursorPositionEnd);
+      _vKeyBoard.focusTextArea(cursorPositionStart+1);
+  }
+}
+
 let body = document.querySelector("body");
 
 let keyboard = document.createElement("div");
@@ -14,7 +32,10 @@ body.appendChild(keyboard);
 
 let textArea = document.createElement("textarea");
 textArea.className = "keyboard__text-area";
+textArea.id = "kbText";
 textArea.autofocus = true;
+textArea.rows = 10;
+_vKeyBoard.textArea = textArea;
 keyboard.appendChild(textArea);
 
 let keyboardPanel = document.createElement("div");
@@ -47,19 +68,17 @@ arrayOfButtonKeys.push([
   { type: "number", initial: "=", shifted: "+" },
   {
     type: "functional",
-    initial: "Backspase",
+    initial: "Backspace",
     func: function () {
       let cursorPositionStart = textArea.selectionStart;
       let cursorPositionEnd = textArea.selectionEnd;
       textArea.value =
         textArea.value.substring(0, cursorPositionStart - 1) +
         textArea.value.substring(cursorPositionEnd);
-      textArea.focus();
       if (cursorPositionStart > 0) {
         cursorPositionStart--;
       }
-      textArea.selectionStart = cursorPositionStart;
-      textArea.selectionEnd = cursorPositionStart;
+      _vKeyBoard.focusTextArea(cursorPositionStart);
     },
   },
 ]);
@@ -68,9 +87,7 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Tab",
-    func: function () {
-      textArea.value += "\t";
-    },
+    func: () => _vKeyBoard.insertSymbol('\t'),
   },
   { type: "letter", initial: "й", shifted: "Й" },
   { type: "letter", initial: "ц", shifted: "Ц" },
@@ -94,11 +111,75 @@ arrayOfButtonKeys.push([
       textArea.value =
         textArea.value.substring(0, cursorPositionStart) +
         textArea.value.substring(cursorPositionEnd + 1);
-      textArea.focus();
-      textArea.selectionStart = cursorPositionStart;
-      textArea.selectionEnd = cursorPositionStart;
+      _vKeyBoard.focusTextArea(cursorPositionStart);
     },
   },
+]);
+
+arrayOfButtonKeys.push([
+  { type: "functional", initial: "Caps Lock", func: function () {} },
+  { type: "letter", initial: "ф", shifted: "Ф" },
+  { type: "letter", initial: "ы", shifted: "Ы" },
+  { type: "letter", initial: "в", shifted: "В" },
+  { type: "letter", initial: "а", shifted: "А" },
+  { type: "letter", initial: "п", shifted: "П" },
+  { type: "letter", initial: "р", shifted: "Р" },
+  { type: "letter", initial: "о", shifted: "О" },
+  { type: "letter", initial: "л", shifted: "Л" },
+  { type: "letter", initial: "д", shifted: "Д" },
+  { type: "letter", initial: "ж", shifted: "Ж" },
+  { type: "letter", initial: "э", shifted: "Э" },
+  {
+    type: "functional",
+    initial: "Enter",
+    func: () => _vKeyBoard.insertSymbol('\n'),
+  },
+]);
+
+arrayOfButtonKeys.push([
+  { type: "functional", initial: "Shift", func: function () {} },
+  { type: "letter", initial: "я", shifted: "Я" },
+  { type: "letter", initial: "ч", shifted: "Ч" },
+  { type: "letter", initial: "с", shifted: "С" },
+  { type: "letter", initial: "м", shifted: "М" },
+  { type: "letter", initial: "и", shifted: "И" },
+  { type: "letter", initial: "т", shifted: "Т" },
+  { type: "letter", initial: "ь", shifted: "Ь" },
+  { type: "letter", initial: "б", shifted: "Б" },
+  { type: "letter", initial: "ю", shifted: "Ю" },
+  { type: "number", initial: ".", shifted: "," },
+  { type: "functional", initial: "↑", func: function () {} },
+  { type: "functional", initial: "Shift", func: function () {} },
+]);
+
+arrayOfButtonKeys.push([
+  { type: "functional", initial: "Ctrl", func: function () {} },
+  { type: "functional", initial: "Windows", func: function () {} },
+  { type: "functional", initial: "Alt", func: function () {} },
+  {
+    type: "functional",
+    initial: "Space",
+    func:  () => _vKeyBoard.insertSymbol(' '),
+  },
+  { type: "functional", initial: "Alt", func: function () {} },
+  {
+    type: "functional",
+    initial: "←",
+    func: function () {
+      let cursorPositionStart = textArea.selectionStart;
+      _vKeyBoard.focusTextArea(cursorPositionStart-1);
+    },
+  },
+  { type: "functional", initial: "↓", func: function () {} },
+  {
+    type: "functional",
+    initial: "→",
+    func: function () {
+      let cursorPositionStart = textArea.selectionStart;
+      _vKeyBoard.focusTextArea(cursorPositionStart+1);
+    },
+  },
+  { type: "functional", initial: "Ctrl", func: function () {} },
 ]);
 
 arrayOfButtonKeys.forEach((line) => {
@@ -126,11 +207,9 @@ arrayOfButtonKeys.forEach((line) => {
     if (key.type == "number") {
       let timer;
       keyDom.addEventListener("mousedown", () => {
-        if (_FUNCTIONAL_KEYS.shift) textArea.value += key.shifted;
-        else textArea.value += key.initial;
+        _vKeyBoard.insertSymbol(_FUNCTIONAL_KEYS.shift ? key.shifted : key.initial);
         timer = setTimeout(function tick() {
-          if (_FUNCTIONAL_KEYS.shift) textArea.value += key.shifted;
-          else textArea.value += key.initial;
+          _vKeyBoard.insertSymbol(_FUNCTIONAL_KEYS.shift ? key.shifted : key.initial);
           timer = setTimeout(tick, 50);
         }, 500);
       });
@@ -139,19 +218,21 @@ arrayOfButtonKeys.forEach((line) => {
     } else if (key.type == "letter") {
       let timer;
       keyDom.addEventListener("mousedown", () => {
-        if (_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps)
-          textArea.value += key.shifted;
-        else textArea.value += key.initial;
+        _vKeyBoard.insertSymbol(_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps ? key.shifted : key.initial);
         timer = setTimeout(function tick() {
-          if (_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps)
-            textArea.value += key.shifted;
-          else textArea.value += key.initial;
+          _vKeyBoard.insertSymbol(_FUNCTIONAL_KEYS.shift || _FUNCTIONAL_KEYS.caps ? key.shifted : key.initial);
           timer = setTimeout(tick, 50);
         }, 500);
       });
       keyDom.addEventListener("mouseup", () => clearTimeout(timer));
       keyDom.addEventListener("mouseleave", () => clearTimeout(timer));
     } else {
+      keyDom.classList.add(
+        "keyboard-line__button-main-text_" +
+          key.initial.toLowerCase().replace(" ", "-")
+      );
+      if (key.initial == "Space") keyDom.innerText = "";
+
       if (key.isClick) keyDom.addEventListener("click", key.func);
       else {
         let timer;
