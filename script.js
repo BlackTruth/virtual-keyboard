@@ -765,7 +765,7 @@ document.addEventListener("keyup", (event) => {
 
 function changeLayout() {
   const rows = document.querySelectorAll(".keyboard-panel > .keyboard-line");
-  rows.forEach((row, i) => {
+  [...rows].forEach((row, i) => {
     const buttons = row.querySelectorAll(".keyboard-line__button");
     buttons.forEach((button, j) => {
       const key = arrayOfButtonKeys[i][j];
