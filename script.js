@@ -739,6 +739,11 @@ arrayOfButtonKeys.forEach((line) => {
   });
 });
 
+const layoutMessage = document.createElement("div");
+layoutMessage.innerText = "To change layout use Shift + Alt (developed on Windows OS)";
+layoutMessage.className = "keyboard__message";
+keyboard.appendChild(layoutMessage);
+
 document.addEventListener("keydown", (event) => {
   const key = document.querySelector(`div[key=${event.code}]`);
   if (key) {
