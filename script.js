@@ -620,8 +620,7 @@ arrayOfButtonKeys.push([
 
 function getType(key) {
   if (key.type) return key.type;
-  return key.languages[window.localStorage.getItem("virtualKeyBoardLang")]
-    .type;
+  return key.languages[window.localStorage.getItem("virtualKeyBoardLang")].type;
 }
 
 function getChar(key, type) {
@@ -633,10 +632,8 @@ function getChar(key, type) {
   }
   if (key.initial) return isShifted ? key.shifted : key.initial;
   return isShifted
-    ? key.languages[window.localStorage.getItem("virtualKeyBoardLang")]
-      .shifted
-    : key.languages[window.localStorage.getItem("virtualKeyBoardLang")]
-      .initial;
+    ? key.languages[window.localStorage.getItem("virtualKeyBoardLang")].shifted
+    : key.languages[window.localStorage.getItem("virtualKeyBoardLang")].initial;
 }
 
 arrayOfButtonKeys.forEach((line) => {
@@ -696,13 +693,18 @@ arrayOfButtonKeys.forEach((line) => {
       });
     } else {
       keyDom.classList.add(
-        `keyboard-line__button-main-text_${
-          key.initial.toLowerCase().replace(" ", "-")}`,
+        `keyboard-line__button-main-text_${key.initial
+          .toLowerCase()
+          .replace(" ", "-")}`,
       );
       if (key.initial === "Space") keyDom.innerText = "";
 
-      if (key.isClick) keyDom.addEventListener("click", () => key.func(keyDom));
-      else {
+      if (key.isClick) {
+        keyDom.addEventListener("click", () => {
+          vKeyBoard.focusTextArea();
+          key.func(keyDom);
+        });
+      } else {
         let timer;
         let isMouseUp = false;
         let isAnimationEnd = false;
@@ -729,6 +731,7 @@ arrayOfButtonKeys.forEach((line) => {
           isAnimationEnd = true;
           if (isMouseUp) keyDom.classList.remove("keyboard-line__button_pressed");
         });
+        vKeyBoard.focusTextArea();
       }
     }
 
@@ -752,6 +755,15 @@ document.addEventListener("keydown", (event) => {
     if (event.code === "Tab") {
       event.preventDefault();
       vKeyBoard.insertSymbol("\t");
+    } else if (event.code === "AltLeft" || event.code === "AltRight") event.preventDefault();
+    if (
+      (FUNCTIONAL_KEYS.caps && event.key.toLowerCase() === event.key)
+      || (!FUNCTIONAL_KEYS.caps && event.key.toUpperCase() === event.key)
+    ) {
+      event.preventDefault();
+      vKeyBoard.insertSymbol(
+        FUNCTIONAL_KEYS.caps ? event.key.toUpperCase() : event.key.toLowerCase(),
+      );
     }
   }
 });
@@ -773,7 +785,9 @@ function changeLayout() {
         button.classList.forEach((c) => {
           if (c !== "keyboard-line__button") button.classList.remove(c);
         });
-        const mainText = button.querySelector(".keyboard-line__button-main-text");
+        const mainText = button.querySelector(
+          ".keyboard-line__button-main-text",
+        );
         mainText.innerText = getChar(key, "initial");
         if (getType(key) === "number") {
           const shiftedText = button.querySelector(
