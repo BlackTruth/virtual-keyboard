@@ -1,0 +1,139 @@
+let keyState = require("./keyState");
+let DEFAULT_INPUT;
+
+class VirtualKeyboardInput {
+  constructor(textArea) {
+    this.textArea = textArea;
+  }
+
+  focus(cursorPosition = this.textArea.selectionStart) {
+    setTimeout(() => {
+      this.textArea.focus();
+      this.textArea.selectionStart = cursorPosition;
+      this.textArea.selectionEnd = cursorPosition;
+    }, 0);
+  }
+
+  insert(char) {
+    const cursorPositionStart = this.textArea.selectionStart;
+    const cursorPositionEnd = this.textArea.selectionEnd;
+    this.textArea.value =
+      this.textArea.value.substring(0, cursorPositionStart) +
+      char +
+      this.textArea.value.substring(cursorPositionEnd);
+    this.focus(cursorPositionStart + 1);
+  }
+
+  set value(v) {
+    this.textArea.value = v;
+  }
+
+  get value() {
+    return this.textArea.value;
+  }
+
+  get end() {
+    return this.textArea.selectionEnd;
+  }
+
+  get start() {
+    return this.textArea.selectionStart;
+  }
+}
+
+function initialize(textArea) {
+  DEFAULT_INPUT = new VirtualKeyboardInput(textArea);
+}
+
+function backspace(input = DEFAULT_INPUT) {
+  if (!(input instanceof VirtualKeyboardInput)) {
+    console.error(`wrong type of input ${input}`);
+    return;
+  }
+  let cursorPositionStart = input.start;
+  const cursorPositionEnd = input.end;
+  input.value =
+    input.value.substring(0, cursorPositionStart - 1) +
+    input.value.substring(cursorPositionEnd);
+  if (cursorPositionStart > 0) {
+    cursorPositionStart -= 1;
+  }
+  input.focus(cursorPositionStart);
+}
+
+function insert(value, input = DEFAULT_INPUT) {
+  input.insert(value);
+}
+
+function del(input = DEFAULT_INPUT) {
+  const cursorPositionStart = input.start;
+  const cursorPositionEnd = input.end;
+  input.value =
+    input.value.substring(0, cursorPositionStart) +
+    input.value.substring(cursorPositionEnd + 1);
+  input.focus(cursorPositionStart);
+}
+
+function functionalKey(keyDom, type, input = DEFAULT_INPUT) {
+  keyState[type] = !keyState[type];
+  if (keyState[type]) keyDom.classList.add("keyboard-line__button_pressed");
+  else keyDom.classList.remove("keyboard-line__button_pressed");
+  input.focus();
+}
+
+function arrowUp(input = DEFAULT_INPUT) {
+  const cursorPosition = input.start;
+  let value = input.value;
+  const cursorLineBegin =
+    value.substring(0, cursorPosition).lastIndexOf("\n") + 1;
+  const cursorLength = cursorPosition - cursorLineBegin;
+  value = value.substring(0, cursorLineBegin - 1);
+  const nextLineBegin = value.lastIndexOf("\n") + 1;
+  const prevLineLength = cursorLineBegin - nextLineBegin - 1;
+  let newPosition =
+    nextLineBegin +
+    (cursorLength > prevLineLength ? prevLineLength : cursorLength);
+  if (newPosition < 0) newPosition = 0;
+  input.focus(newPosition);
+}
+
+function arrowLeft(input = DEFAULT_INPUT) {
+  const cursorPositionStart = input.start;
+  input.focus(cursorPositionStart - 1);
+}
+
+function arrowDown(input = DEFAULT_INPUT) {
+  const cursorPosition = input.start;
+  const value = input.value;
+  const cursorLineBegin =
+    value.substring(0, cursorPosition).lastIndexOf("\n") + 1;
+  const cursorLength = cursorPosition - cursorLineBegin;
+  let nextLineBegin = value.indexOf("\n", cursorPosition) + 1;
+  if (nextLineBegin < 1) nextLineBegin = value.length;
+  let nextLineLength = value.indexOf("\n", nextLineBegin) - nextLineBegin;
+  if (nextLineLength < 0) nextLineLength = value.length - nextLineBegin;
+  let newPosition =
+    nextLineBegin +
+    (cursorLength > nextLineLength ? nextLineLength : cursorLength);
+  if (newPosition < 0) newPosition = value.length;
+  input.focus(newPosition);
+}
+
+function arrowRight(input = DEFAULT_INPUT) {
+  const cursorPositionStart = input.start;
+  input.focus(cursorPositionStart + 1);
+}
+
+module.exports = {
+  initialize,
+  backspace,
+  insert,
+  del,
+  functionalKey,
+  arrowUp,
+  arrowLeft,
+  arrowDown,
+  arrowRight,
+  VirtualKeyboardInput,
+  keyState,
+};
