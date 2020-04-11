@@ -95,9 +95,12 @@ body {
   width: 85px;
 }
 
-.keyboard-line__button-main-text_caps-lock,
-.keyboard-line__button-main-text_ctrl {
+.keyboard-line__button-main-text_caps-lock {
   width: 100px;
+}
+
+.keyboard-line__button-main-text_ctrl {
+  width: 64px;
 }
 
 .keyboard-line__button-main-text_shift {
@@ -105,7 +108,7 @@ body {
 }
 
 .keyboard-line__button-main-text_space {
-  width: 334px;
+  width: 370px;
 }
 
 .keyboard-line__button-main-text_enter {
