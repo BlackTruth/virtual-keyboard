@@ -28,9 +28,6 @@ body {
   margin-top: 20px;
 }
 
-.keyboard-panel {
-}
-
 .keyboard-line {
   display: flex;
   justify-content: space-between;
@@ -122,8 +119,5 @@ body {
 .keyboard-line__button-shifted-text {
   order: 1;
   align-self: flex-start;
-}
-
-.keyboard-line__button_default {
 }
 
