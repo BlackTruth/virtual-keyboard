@@ -176,14 +176,13 @@ document.addEventListener("keydown", (event) => {
       keyboardInput.insert("\t");
     } else if (event.code === "AltLeft" || event.code === "AltRight")
       event.preventDefault();
+    let keyModule = [].concat(...arrayOfButtonKeys).find( (e) => e.code === event.code );
     if (
-      (keyState.caps && event.key.toLowerCase() === event.key) ||
-      (!keyState.caps && event.key.toUpperCase() === event.key)
+      getType(keyModule) === "number" || getType(keyModule) === "letter"
     ) {
       event.preventDefault();
-      keyboardInput.insert(
-        keyState.caps ? event.key.toUpperCase() : event.key.toLowerCase()
-      );
+      let isShifted = getType(keyModule) === "number" ? event.shiftKey : event.shiftKey || keyState.caps;
+      keyboardInput.insert(getChar(keyModule, isShifted ? "shifted" : "initial"));
     }
   }
 });
