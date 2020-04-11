@@ -2,20 +2,25 @@
   "name": "codejam-virtual-keyboard",
   "version": "1.0.0",
   "description": "virtual keyboard",
-  "main": "index.html",
-  "dependencies": {},
+  "private": true,
+  "dependencies": {
+    "eslint-plugin-prettier": "^3.1.2"
+  },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
     "htmlhint": "^0.11.0",
     "stylelint": "^13.2.0",
     "stylelint-config-htmlacademy": "^0.1.4",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1"
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
