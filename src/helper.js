@@ -4,10 +4,9 @@ function getType(key, language) {
 }
 
 function getChar(keyState, key, language, type) {
-  let isShifted =
-    getType(key, language) === "number"
-      ? keyState.shift
-      : keyState.shift || keyState.caps;
+  let isShifted = getType(key, language) === "number"
+    ? keyState.shift
+    : keyState.shift || keyState.caps;
   if (type) {
     isShifted = type === "shifted";
   }
@@ -27,16 +26,18 @@ function getKeyButton(target, style, arrayOfButtonKeys) {
       keyDom: target,
       key: getKeyModule(arrayOfButtonKeys, target.getAttribute("key")),
     };
-  } else if (target.parentElement.classList.contains(style)) {
+  } if (target.parentElement.classList.contains(style)) {
     return {
       keyDom: target.parentElement,
       key: getKeyModule(
         arrayOfButtonKeys,
-        target.parentElement.getAttribute("key")
+        target.parentElement.getAttribute("key"),
       ),
     };
   }
   return { keyDom: undefined, key: undefined };
 }
 
-module.exports = { getType, getChar, getKeyModule, getKeyButton };
+module.exports = {
+  getType, getChar, getKeyModule, getKeyButton,
+};

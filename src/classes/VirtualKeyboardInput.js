@@ -14,15 +14,18 @@ class VirtualKeyboardInput {
   insert(char) {
     const cursorPositionStart = this.textArea.selectionStart;
     const cursorPositionEnd = this.textArea.selectionEnd;
-    this.textArea.value =
-      this.textArea.value.substring(0, cursorPositionStart) +
-      char +
-      this.textArea.value.substring(cursorPositionEnd);
+    this.textArea.value = this.textArea.value.substring(0, cursorPositionStart)
+      + char
+      + this.textArea.value.substring(cursorPositionEnd);
     this.focus(cursorPositionStart + 1);
   }
 
   set value(v) {
     this.textArea.value = v;
+  }
+
+  setValue(v) {
+    this.value = v;
   }
 
   get value() {

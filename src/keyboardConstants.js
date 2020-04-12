@@ -1,4 +1,4 @@
-let kFunc = require("./keyboardFunctions");
+const kFunc = require("./keyboardFunctions");
 
 const arrayOfButtonKeys = [];
 arrayOfButtonKeys.push([
@@ -18,7 +18,7 @@ arrayOfButtonKeys.push([
   {
     type: "number",
     languages: {
-      ru: { initial: "2", shifted: '""' },
+      ru: { initial: "2", shifted: "\"\"" },
       en: { initial: "2", shifted: "@" },
     },
     code: "Digit2",
@@ -223,8 +223,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Caps Lock",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "caps", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "caps", input),
     code: "CapsLock",
   },
   {
@@ -309,7 +308,7 @@ arrayOfButtonKeys.push([
   {
     languages: {
       ru: { type: "letter", initial: "э", shifted: "Э" },
-      en: { type: "number", initial: "'", shifted: '"' },
+      en: { type: "number", initial: "'", shifted: "\"" },
     },
     code: "Quote",
   },
@@ -326,8 +325,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "shift", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "shift", input),
     code: "ShiftLeft",
   },
   {
@@ -418,8 +416,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "shiftRight", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "shiftRight", input),
     code: "ShiftRight",
   },
 ]);
@@ -429,8 +426,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Ctrl",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "ctrl", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "ctrl", input),
     code: "ControlLeft",
   },
   {
@@ -444,8 +440,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Alt",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "alt", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "alt", input),
     code: "AltLeft",
   },
   {
@@ -458,8 +453,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Alt",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "altRight", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "altRight", input),
     code: "AltRight",
   },
   {
@@ -484,8 +478,7 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Ctrl",
     isClick: true,
-    func: (keyState, keyDom, input) =>
-      kFunc.functionalKey(keyState, keyDom, "ctrlRight", input),
+    func: (keyState, keyDom, input) => kFunc.functionalKey(keyState, keyDom, "ctrlRight", input),
     code: "ControlRight",
   },
 ]);
