@@ -105,7 +105,7 @@ arrayOfButtonKeys.push([
   {
     type: "functional",
     initial: "Tab",
-    func: (input) =>  kFunc.insert("\t", input),
+    func: (input) => kFunc.insert("\t", input),
     code: "Tab",
   },
   {
@@ -483,4 +483,4 @@ arrayOfButtonKeys.push([
   },
 ]);
 
-module.exports = { arrayOfButtonKeys, "VirtualKeyboardInput" : kFunc.VirtualKeyboardInput, keyState : kFunc.keyState };
+module.exports = { arrayOfButtonKeys, keyState: kFunc.keyState };

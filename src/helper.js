@@ -17,4 +17,26 @@ function getChar(keyState, key, type) {
     : key.languages[window.localStorage.getItem("virtualKeyBoardLang")].initial;
 }
 
-module.exports = { getType, getChar };
+function getKeyModule(arrayOfButtonKeys, code) {
+  return [].concat(...arrayOfButtonKeys).find((e) => e.code === code);
+}
+
+function getKeyButton(target, style, arrayOfButtonKeys) {
+  if (target.classList.contains(style)) {
+    return {
+      keyDom: target,
+      key: getKeyModule(arrayOfButtonKeys, target.getAttribute("key")),
+    };
+  } else if (target.parentElement.classList.contains(style)) {
+    return {
+      keyDom: target.parentElement,
+      key: getKeyModule(
+        arrayOfButtonKeys,
+        target.parentElement.getAttribute("key")
+      ),
+    };
+  }
+  return { keyDom: undefined, key: undefined };
+}
+
+module.exports = { getType, getChar, getKeyModule, getKeyButton };
