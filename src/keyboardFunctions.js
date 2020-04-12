@@ -1,4 +1,3 @@
-let keyState = require("./keyState");
 let { VirtualKeyboardInput } = require("./classes/VirtualKeyboardInput");
 let DEFAULT_INPUT;
 
@@ -35,7 +34,7 @@ function del(input = DEFAULT_INPUT) {
   input.focus(cursorPositionStart);
 }
 
-function functionalKey(keyDom, type, input = DEFAULT_INPUT) {
+function functionalKey(keyState, keyDom, type, input = DEFAULT_INPUT) {
   keyState[type] = !keyState[type];
   if (keyState[type]) keyDom.classList.add("keyboard-line__button_pressed");
   else keyDom.classList.remove("keyboard-line__button_pressed");
@@ -95,5 +94,4 @@ module.exports = {
   arrowLeft,
   arrowDown,
   arrowRight,
-  keyState,
 };

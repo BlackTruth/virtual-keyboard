@@ -223,7 +223,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Caps Lock",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "caps", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "caps", input),
     code: "CapsLock",
   },
   {
@@ -325,7 +326,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "shift", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "shift", input),
     code: "ShiftLeft",
   },
   {
@@ -416,7 +418,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Shift",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "shiftRight", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "shiftRight", input),
     code: "ShiftRight",
   },
 ]);
@@ -426,7 +429,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Ctrl",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "ctrl", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "ctrl", input),
     code: "ControlLeft",
   },
   {
@@ -440,7 +444,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Alt",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "alt", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "alt", input),
     code: "AltLeft",
   },
   {
@@ -453,7 +458,8 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Alt",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "altRight", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "altRight", input),
     code: "AltRight",
   },
   {
@@ -478,9 +484,10 @@ arrayOfButtonKeys.push([
     type: "functional",
     initial: "Ctrl",
     isClick: true,
-    func: (keyDom, input) => kFunc.functionalKey(keyDom, "ctrlRight", input),
+    func: (keyState, keyDom, input) =>
+      kFunc.functionalKey(keyState, keyDom, "ctrlRight", input),
     code: "ControlRight",
   },
 ]);
 
-module.exports = { arrayOfButtonKeys, keyState: kFunc.keyState };
+module.exports = { arrayOfButtonKeys };

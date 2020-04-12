@@ -1,11 +1,11 @@
-function getType(key) {
+function getType(key, language) {
   if (key.type) return key.type;
-  return key.languages[window.localStorage.getItem("virtualKeyBoardLang")].type;
+  return key.languages[language].type;
 }
 
-function getChar(keyState, key, type) {
+function getChar(keyState, key, language, type) {
   let isShifted =
-    getType(key) === "number"
+    getType(key, language) === "number"
       ? keyState.shift
       : keyState.shift || keyState.caps;
   if (type) {
@@ -13,8 +13,8 @@ function getChar(keyState, key, type) {
   }
   if (key.initial) return isShifted ? key.shifted : key.initial;
   return isShifted
-    ? key.languages[window.localStorage.getItem("virtualKeyBoardLang")].shifted
-    : key.languages[window.localStorage.getItem("virtualKeyBoardLang")].initial;
+    ? key.languages[language].shifted
+    : key.languages[language].initial;
 }
 
 function getKeyModule(arrayOfButtonKeys, code) {
