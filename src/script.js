@@ -3,6 +3,7 @@ let {
   VirtualKeyboardInput,
   keyState,
 } = require("./keyboardConstants");
+let { getChar, getType } = require("./helper");
 if (!window.localStorage.getItem("virtualKeyBoardLang")) {
   window.localStorage.setItem("virtualKeyBoardLang", "en");
 }
@@ -25,25 +26,6 @@ const keyboardPanel = document.createElement("div");
 keyboardPanel.className = "keyboard-panel";
 keyboard.appendChild(keyboardPanel);
 
-function getType(key) {
-  if (key.type) return key.type;
-  return key.languages[window.localStorage.getItem("virtualKeyBoardLang")].type;
-}
-
-function getChar(key, type) {
-  let isShifted =
-    getType(key) === "number"
-      ? keyState.shift
-      : keyState.shift || keyState.caps;
-  if (type) {
-    isShifted = type === "shifted";
-  }
-  if (key.initial) return isShifted ? key.shifted : key.initial;
-  return isShifted
-    ? key.languages[window.localStorage.getItem("virtualKeyBoardLang")].shifted
-    : key.languages[window.localStorage.getItem("virtualKeyBoardLang")].initial;
-}
-
 arrayOfButtonKeys.forEach((line) => {
   const keyboardLine = document.createElement("div");
   keyboardLine.className = "keyboard-line";
@@ -59,13 +41,13 @@ arrayOfButtonKeys.forEach((line) => {
       keyDom.classList.add("keyboard-line__button_single");
     }
     keyDom.appendChild(mainText);
-    mainText.innerText = getChar(key, "initial");
+    mainText.innerText = getChar(keyState, key, "initial");
 
     const shiftedText = document.createElement("div");
     shiftedText.className = "keyboard-line__button-shifted-text";
     keyDom.appendChild(shiftedText);
     if (getType(key) === "number") {
-      shiftedText.innerText = getChar(key, "shifted");
+      shiftedText.innerText = getChar(keyState, key, "shifted");
     }
 
     keyDom.addEventListener("mousedown", () => {
@@ -78,9 +60,9 @@ arrayOfButtonKeys.forEach((line) => {
       keyDom.addEventListener("mousedown", () => {
         isMouseUp = false;
         isAnimationEnd = false;
-        keyboardInput.insert(getChar(key));
+        keyboardInput.insert(getChar(keyState, key));
         timer = setTimeout(function tick() {
-          keyboardInput.insert(getChar(key));
+          keyboardInput.insert(getChar(keyState, key));
           timer = setTimeout(tick, 50);
         }, 500);
       });
@@ -193,7 +175,7 @@ document.addEventListener("keydown", (event) => {
           ? event.shiftKey
           : event.shiftKey || keyState.caps;
       keyboardInput.insert(
-        getChar(keyModule, isShifted ? "shifted" : "initial")
+        getChar(keyState, keyModule, isShifted ? "shifted" : "initial")
       );
     }
   }
@@ -224,12 +206,12 @@ function changeLayout() {
         const mainText = button.querySelector(
           ".keyboard-line__button-main-text"
         );
-        mainText.innerText = getChar(key, "initial");
+        mainText.innerText = getChar(keyState, key, "initial");
         if (getType(key) === "number") {
           const shiftedText = button.querySelector(
             ".keyboard-line__button-shifted-text"
           );
-          shiftedText.innerText = getChar(key, "shifted");
+          shiftedText.innerText = getChar(keyState, key, "shifted");
         } else {
           button.classList.add("keyboard-line__button_single");
         }
