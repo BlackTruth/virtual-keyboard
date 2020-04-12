@@ -3,8 +3,9 @@ let {
   VirtualKeyboardInput,
   keyState,
 } = require("./keyboardConstants");
-if (!window.localStorage.getItem("virtualKeyBoardLang"))
+if (!window.localStorage.getItem("virtualKeyBoardLang")) {
   window.localStorage.setItem("virtualKeyBoardLang", "en");
+}
 
 const body = document.querySelector("body");
 
@@ -168,7 +169,13 @@ document.addEventListener("keydown", (event) => {
         keyState.caps = true;
       }
     } else key.classList.add("keyboard-line__button_pressed");
-    if((event.key === "Alt" || event.key === "AltGraph" || event.key === "Shift") && event.shiftKey && event.altKey){
+    if (
+      (event.key === "Alt" ||
+        event.key === "AltGraph" ||
+        event.key === "Shift") &&
+      event.shiftKey &&
+      event.altKey
+    ) {
       changeLayout();
     }
     if (event.code === "Tab") {
@@ -176,13 +183,18 @@ document.addEventListener("keydown", (event) => {
       keyboardInput.insert("\t");
     } else if (event.code === "AltLeft" || event.code === "AltRight")
       event.preventDefault();
-    let keyModule = [].concat(...arrayOfButtonKeys).find( (e) => e.code === event.code );
-    if (
-      getType(keyModule) === "number" || getType(keyModule) === "letter"
-    ) {
+    let keyModule = []
+      .concat(...arrayOfButtonKeys)
+      .find((e) => e.code === event.code);
+    if (getType(keyModule) === "number" || getType(keyModule) === "letter") {
       event.preventDefault();
-      let isShifted = getType(keyModule) === "number" ? event.shiftKey : event.shiftKey || keyState.caps;
-      keyboardInput.insert(getChar(keyModule, isShifted ? "shifted" : "initial"));
+      let isShifted =
+        getType(keyModule) === "number"
+          ? event.shiftKey
+          : event.shiftKey || keyState.caps;
+      keyboardInput.insert(
+        getChar(keyModule, isShifted ? "shifted" : "initial")
+      );
     }
   }
 });
@@ -236,10 +248,7 @@ document.addEventListener("click", (event) => {
   ) {
     keyboardInput.focus();
   }
-  if (
-    (keyState.alt) &&
-    (keyState.shift || keyState.shiftRight)
-  ) {
+  if (keyState.alt && (keyState.shift || keyState.shiftRight)) {
     keyState.alt = false;
     keyState.shift = false;
     keyState.shiftRight = false;
